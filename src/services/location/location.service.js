@@ -1,17 +1,15 @@
 import camelize from "camelize";
-import { locations } from "./location.mock";
 
 export const locationRequest = (searchTerm) => {
-  return new Promise((resolve, reject) => {
-    const locationMock = locations[searchTerm];
-    if (!locationMock) {
-      reject("notfound");
-    }
-    resolve(locationMock);
+  return fetch(
+    `http://localhost:5001/mealstogo-d1a74/us-central1/geocode?city=${searchTerm}`
+  ).then((res) => {
+    return res.json();
   });
 };
 
 export const locationTransform = (result) => {
+  console.log(result);
   const formatedResponse = camelize(result);
   const { geometry = {} } = formatedResponse.results[0];
   const { lat, lng } = geometry.location;
