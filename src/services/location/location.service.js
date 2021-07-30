@@ -1,9 +1,8 @@
 import camelize from "camelize";
+import { host, isMock } from "../../utils/env";
 
 export const locationRequest = (searchTerm) => {
-  return fetch(
-    `http://b40520e960d3.ngrok.io/mealstogo-d1a74/us-central1/geocode?city=${searchTerm}`
-  ).then((res) => {
+  return fetch(`${host}/geocode?city=${searchTerm}&mock=${isMock}`).then((res) => {
     return res.json();
   });
 };

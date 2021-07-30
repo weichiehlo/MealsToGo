@@ -3,11 +3,13 @@ import styled from "styled-components/native";
 import { TouchableOpacity } from "react-native";
 import { ActivityIndicator, Colors } from "react-native-paper";
 import { Spacer } from "../../../components/spacer/spacer.component";
+import { Text } from "../../../components/typography/text.component"
 import { FavouritesBar } from "../../../components/favourites/favourites-bar.component";
 import { SafeArea } from "../../../components/utility/safe-area.component";
 
 import { RestaurantInfoCard } from "../components/restaurant-info-card.component";
 import { RestaurantsContext } from "../../../services/restaurants/restaurants.context";
+import { LocationContext } from "../../../services/location/location.context";
 import { FavouritesContext } from "../../../services/favourites/favourites.context";
 import { Search } from "../../../features/restaurants/components/search.component";
 
@@ -24,9 +26,11 @@ const LoadingContainer = styled.View`
 `;
 
 export const RestaurantScreen = ({ navigation }) => {
-  const { restaurants, isLoading } = useContext(RestaurantsContext);
+  const { restaurants, isLoading, error } = useContext(RestaurantsContext);
+  const { error: locationError } = useContext(LocationContext);
   const [isToggled, setIsToggled] = useState(false);
   const { favourites } = useContext(FavouritesContext);
+  const hasError = (!!error || !!locationError);
 
   return (
     <SafeArea>
@@ -46,7 +50,11 @@ export const RestaurantScreen = ({ navigation }) => {
         />
       )}
 
-      <RestaurantList
+      {hasError && (
+        <Spacer postition="left" size="large">
+          <Text variant="error">Something went wrong retriving the data</Text>
+        </Spacer>)}
+      {!hasError && <RestaurantList
         data={restaurants}
         renderItem={({ item }) => {
           return (
@@ -64,7 +72,7 @@ export const RestaurantScreen = ({ navigation }) => {
           );
         }}
         keyExtractor={(item) => item.name}
-      />
+      />}
     </SafeArea>
   );
 };
