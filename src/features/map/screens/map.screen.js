@@ -65,8 +65,9 @@ export const MapScreen = ({ navigation }) => {
           latitude: 0,
           longitude: 0,
         }}
-      ></Map>)
+      />
+    );
   } else {
-    return <RestaurantMap navigation={navigation} />
+    return <RestaurantMap navigation={navigation} />;
   }
-}
+};
